@@ -1,0 +1,104 @@
+
+const int maxn = 4e4+200, maxl = 1e6+500;
+
+int sa[maxn], t[maxn], t2[maxn], c[maxl], n, rk[maxn],
+    height[maxn], k, mn[maxn][40];
+
+#define CHAR_SA
+#ifdef CHAR_SA
+    char s[maxn];
+    //string s;
+#else
+    int s[maxn];
+#endif // CHAR_SA
+
+void build_sa(int len, int m)
+{
+    int i, *x = t, *y = t2;
+
+    memset(t, 0, sizeof(t));
+    memset(t2, 0, sizeof(t2));
+    memset(sa, 0, sizeof(sa));
+
+    for(i = 0; i < m; i++) c[i] = 0;
+    for(i = 0; i < len; i++) c[x[i] = s[i]]++;
+    for(i = 1; i < m; i++) c[i] += c[i-1];
+    for(i = len-1; i >= 0; i--) sa[--c[x[i]]] = i;
+
+    for(int k = 1; k <= len; k <<= 1){
+        int p = 0;
+
+        for(i = len-k; i < len; i++) y[p++] = i;
+        for(i = 0; i < len; i++) if(sa[i] >= k) y[p++] = sa[i]-k;
+
+        for(i = 0; i < m; i++) c[i] = 0;
+        for(i = 0; i < len; i++) c[x[i]]++;
+        for(i = 1; i < m; i++) c[i] += c[i-1];
+        for(i = len-1; i >= 0; i--) sa[--c[x[y[i]]]] = y[i];
+
+        swap(x,y);
+        p = 1; x[sa[0]] = 1;
+        for(i = 1; i < len; i++){
+            int pr = sa[i], pl = sa[i-1];
+            x[sa[i]] = (y[pl] == y[pr] && y[pl+k] == y[pr+k])?p:++p;
+        }
+
+        if(p >= len) break;
+        m = p+1;
+    }
+}
+
+void get_height(int len)
+{
+    height[0] = 0;
+    for(int i = 0; i < len; i++) rk[sa[i]] = i;
+    for(int i = 0,j,k = 0; i < len; i++){
+        if(rk[i] == 0) continue;
+        if(k) k--;
+        j = sa[rk[i]-1];
+        while(s[i+k] == s[j+k]) k++;
+        height[rk[i]] = k;
+    }
+}
+
+void print_sa(int len)
+{
+    for(int i = 0; i < len; i++){
+        printf("sa[%d]:%d, height[%d]:%d, ",i,sa[i],i,height[i]);
+        for(int j = sa[i]; j < len; j++)
+            printf("%c ",s[j]);
+        lb;
+    }
+}
+
+void rmq_init(int len)
+{
+    for(int i = 0; i < len; i++) mn[i][0] = height[i];
+    for(int k = 1; (1<<k) <= len; k++){
+        for(int i = 0; i + (1<<k) <= len; i++){
+            mn[i][k] = min(mn[i][k-1], mn[i+(1<<(k-1))][k-1]);
+        }
+    }
+}
+
+int rmq_query(int l, int r)
+{
+    l = rk[l], r = rk[r];
+    if(l > r) swap(l,r);
+    l++;
+    int k = 0;
+    k = log2(r-l+1);
+    return min(mn[l][k], mn[r-(1<<k)+1][k]);
+}
+
+int main()
+{
+    while(scanf("%s",s)){
+        int len = strlen(s);
+        build_sa(len, 200);
+        get_height(len);
+        print_sa(len);
+
+    }
+    return 0;
+}
