@@ -1,0 +1,74 @@
+struct Trie
+{
+    int ch[maxn][sgm_sz];
+    int val[maxn];
+    int last[maxn];
+    int f[maxn];
+    int sz;
+
+    void init()
+    {
+        sz = 1;
+        memset(ch[0], 0, sizeof(ch[0]));
+    }
+    int idx(char c) {return c - 'a';}
+    void Insert(char *s, int v)
+    {
+        int u = 0, len = strlen(s);
+        for(int i = 0; i < len; i++){
+            int c = idx(s[i]);
+            if(!ch[u][c]){
+                memset(ch[sz], 0, sizeof(ch[sz]));
+                ch[u][c] = sz;
+                val[sz++] = 0;
+            }
+            u = ch[u][c];
+        }
+        val[u] = v;
+    }
+
+    void getFail()
+    {
+        queue<int> q;
+        last[0] = f[0] = 0;
+        for(int i = 0; i < sgm_sz; i++){
+            int u = ch[0][i];
+            if(u){
+                f[u] = last[u] = 0;
+                q.push(u);
+            }
+        }
+        while(!q.empty()){
+            int p = q.front();  q.pop();
+            for(int i = 0; i < sgm_sz; i++){
+                int u = ch[p][i];
+                if(!u)  continue;
+                q.push(u);
+                int v = f[p];
+                while(v && !ch[v][i])   v = f[v];
+                f[u] = ch[v][i];
+                last[u] = val[f[u]] ? f[u] : last[f[u]];
+            }
+        }
+    }
+
+    void find(char *s)
+    {
+        int len = strlen(s), u = 0;
+        for(int i = 0; i < len; i++){
+            int c = idx(s[i]);
+            while(u && !ch[u][c])   u = f[u];
+            u = ch[u][c];
+            if(val[u])  deal(u);
+            else if(last[u])    deal(last[u]);
+        }
+    }
+
+    void deal(int u)
+    {
+        if(u){
+            //TODO
+            deal(last[u]);
+        }
+    }
+};
