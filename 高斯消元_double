@@ -1,5 +1,5 @@
-//const int maxn=1002;
-//const double eps=1e-12;
+//const int maxn = 1002;
+//const double eps = 1e-12;
 double a[maxn][maxn];
 int equ,var;//equ个方程,var个变量
 double x[maxn];//解集
@@ -13,7 +13,7 @@ int sgn(double x)
 // 高斯消元法解方程组(Gauss-Jordan elimination).(0表示无解，1表示唯一解，大于1表示无穷解，并返回自由变元的个数)
 int gauss()
 {
-    equ=n,var=n;//多少个方程，多少个变量
+    equ = n,var = n;//多少个方程，多少个变量
     int i,j,k;
     int max_r; // 当前这列绝对值最大的行.
     int col; // 当前处理的列.
@@ -21,7 +21,7 @@ int gauss()
     int free_x_num;
     int free_index;
     // 转换为阶梯阵.
-    col=0; // 当前处理的列.
+    col = 0; // 当前处理的列.
     memset(free_x,true,sizeof(free_x));
 
     for(k = 0; k<equ && col<var; k++, col++){
