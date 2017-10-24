@@ -123,7 +123,7 @@ struct Trie
             for(int i = 0; i < sgm_sz; i++){
                 int u = ch[p][i];
                 if(!u){
-                    ch[r][c] = ch[f[r]][c];
+                    ch[p][i] = ch[f[p]][i];
                     continue;
                 }
                 q.push(u);
