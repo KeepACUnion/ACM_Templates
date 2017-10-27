@@ -5,7 +5,8 @@ void init()
     memset(c,0,sizeof(c));
     c[0][0] = c[1][0] = c[1][1] = 1;
     for(int i = 2; i < maxn; i++){
-        for(int j = 1; j < maxn; j++)
+        c[i][0] = 1;
+        for(int j = 1; j <= i; j++)
             c[i][j] = (c[i-1][j] + c[i-1][j-1])%mod;
     }
 }
