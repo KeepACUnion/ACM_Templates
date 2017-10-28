@@ -40,3 +40,11 @@ void init()
         iv[i] = inv(fac[i], mod);
     }
 }
+
+ll comb(int x, int y)
+{
+    if(x < y) swap(x,y);
+    ll res = (fac[x]*iv[x-y])%mod;
+    res = (res*iv[y])%mod;
+    return res;
+}
