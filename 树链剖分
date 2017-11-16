@@ -109,3 +109,44 @@ int solve(int x, int y)
     if(x != y) ans = max(ans, query(tid[x]+1, tid[y], 0, 0, sgt_sz-1));
     return ans;
 }
+
+
+int main()
+{
+    //frein;
+    //freout;
+    int t; scanf("%d", &t);
+    while(t--){
+        init();
+        int n; sc(n);
+        for(int i = 1; i < n; i++){
+            int u,v,c;
+            scanf("%d%d%d", &u, &v, &c);
+            tmp[i].u = u; tmp[i].v = v; tmp[i].c = c;
+            add_edge(u,v,c,idx++);
+            add_edge(v,u,c,idx++);
+        }
+        dfs1(1,1,1);
+        dfs2(1,1);
+        tree_init(tim);
+        for(int i = 1; i < n; i++){
+            int u = tmp[i].u, v = tmp[i].v;
+            if(dep[u] > dep[v]){
+                sgt[tid[u]+sgt_sz-1] = tmp[i].c;
+            }
+            else{
+                sgt[tid[v]+sgt_sz-1] = tmp[i].c;
+            }
+        }
+        build(0,0,sgt_sz-1);
+        while(1){
+            char op[10];
+            scanf("%s", op);
+            if(op[0] == 'D') break;
+            int a,b; scanf("%d%d", &a, &b);
+            if(op[0] == 'Q') printf("%d\n", solve(a,b));
+            else    change(a,b);
+        }
+    }
+    return 0;
+}
