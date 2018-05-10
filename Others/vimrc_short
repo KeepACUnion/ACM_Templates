@@ -1,0 +1,5 @@
+set nu mouse=a sw=4 ts=4 sts=4
+set mp=g++\ %<\ -O2\ -Wall\ --std=c++11\ -g\ -o\ %<
+nmap <F2> :bel vs %<.in <CR>
+nmap <F8> :!time ./%< < %<.in <CR>
+nmap <F9> :w <CR> :make<CR>
