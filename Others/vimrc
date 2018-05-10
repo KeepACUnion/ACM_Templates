@@ -1,0 +1,54 @@
+set nocompatible
+syntax on
+colo desert
+set nu
+set tabstop=4
+set softtabstop=4
+set shiftwidth=4
+set cursorline
+set cindent
+set ruler
+set expandtab
+set clipboard=unnamed
+set backspace=indent,eol,start
+au BufNewFile *.cpp 0r head.cpp
+
+map <F10> :sil call Run()<CR>
+map <F9> :sil call CompileRun()<CR>
+inoremap { {}<ESC>i
+
+function! Run()
+    winc l
+    winc k
+    w
+    winc h
+    w
+    only
+    !(time ./%< <%<.in >%<.out)2>>%<.out
+    bel vs %<.in
+    bel sv %<.out
+    winc h
+    redr
+    colo desert
+endfunc
+
+function! CompileRun()
+    set mp=g++\ %\ -O2\ -Wall\ --std=c++11\ -o\ %<\ -DLOCAL
+    winc l
+    winc k
+    w
+    winc h
+    w
+    only
+    let v:statusmsg = ''
+    make
+    if empty(v:statusmsg)
+        call Run()
+    else
+        cw
+        winc k
+        redr
+        colo desert
+    endif
+endfunc
+
