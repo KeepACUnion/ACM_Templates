@@ -16,7 +16,9 @@ void init(int k, int l, int r)
         init(lch, l, (l+r)/2);
         init(rch, (l+r)/2, r);
         dat[k].resize(r-l);
-        merge(ALL(dat[lch]), ALL(dat[rch]), dat[k].begin());
+        copy(ALL(dat[lch]), dat[k].begin());
+        copy(ALL(dat[rch]), dat[k].begin()+dat[lch].size());
+        inplace_merge(dat[k].begin(), dat[k].begin()+dat[lch].size(), dat[k].end());
     }
 }
 int query(int i, int j, int x, int k, int l, int r)
