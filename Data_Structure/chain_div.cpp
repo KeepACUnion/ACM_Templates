@@ -1,8 +1,5 @@
 ///暂时只更新(点权修改,链上点权值和/最大值询问),例题bzoj1036
-
-
 const int maxn = 1e5+10;
-
 ///树链剖分模板
 /************************************************/
 int val_p[maxn], val_e[maxn], ///点权与边权
@@ -21,7 +18,6 @@ void read_edg(int op = 1){///op=1 --> 双向边; op=0 --> 单向边
     add_edg(u, v, w);
     if(op) add_edg(v, u, w);
 }
-
 int tid[maxn],   ///dfs序/tid[i]-->节点i在线段树中的位置
     rk[maxn],    ///rk[i]-->dfs序第i个在树中的节点编号
     top[maxn],   ///所在链顶点
@@ -30,7 +26,6 @@ int tid[maxn],   ///dfs序/tid[i]-->节点i在线段树中的位置
     dep[maxn],   ///深度
     fa[maxn],    ///父节点
     idx;         ///dfs序计数器
-
 void dfs1(int u, int f){
     ///更新dep[u], fa[u], sz[u], son[u]
     dep[u] = dep[f]+1;
@@ -63,17 +58,13 @@ void chain_div(int _n, int rt = 1){///rt取决于题目是否为有根树
     dfs1(rt, rt);
     dfs2(rt, rt);
 }
-
 /*************************************************/
-
 ///线段树和调用部分仅作参考，赛场上自行发挥
 int mx[maxn*3], val[maxn], n, sum[maxn*3];
-
 void pick_up(int rt){
     mx[rt] = max(mx[lson], mx[rson]);
     sum[rt] = sum[lson] + sum[rson];
 }
-
 void build(int rt = 0, int l = 0, int r = n-1){
     if(l == r){
         mx[rt] = sum[rt] = val[l];
@@ -83,7 +74,6 @@ void build(int rt = 0, int l = 0, int r = n-1){
     build(rson, mid+1, r);
     pick_up(rt);
 }
-
 void update(int x, int v, int rt = 0, int l = 0, int r = n-1){
     if(l > x || r < x) return;
     if(l == x && r == x){
@@ -94,7 +84,6 @@ void update(int x, int v, int rt = 0, int l = 0, int r = n-1){
     update(x, v, rson, mid+1, r);
     pick_up(rt);
 }
-
 inline pii add(pii a, pii b){
     return pii(max(a.fi,b.fi), a.se+b.se);
 }
@@ -107,7 +96,6 @@ pii query(int x, int y, int rt = 0, int l = 0, int r = n-1){
         b = query(x, y, rson, mid+1, r);
     return add(a,b);
 }
-
 pii solve(int u, int v){
     pii ans = mk(-INF, 0);
     while(top[u] != top[v]){
@@ -119,7 +107,6 @@ pii solve(int u, int v){
     ans = add(ans, query(tid[u], tid[v]));
     return ans;
 }
-
 int main(){
     tree_init();
     sc(n);
