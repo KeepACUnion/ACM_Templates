@@ -42,10 +42,8 @@ namespace IO {
         print(x); putchar('\n');
     }
 };
-
 //getchar版本
-inline bool scan_d(int &num)  
-{
+inline bool scan_d(int &num){
         char in;bool IsN=false;
         in=getchar();
         if(in==EOF) return false;
@@ -58,9 +56,7 @@ inline bool scan_d(int &num)
         if(IsN) num=-num;
         return true;
 }
-
-inline bool scan_lf(double &num)  
-{
+inline bool scan_lf(double &num){
         char in;double Dec=0.1;
         bool IsN=false,IsD=false;
         in=getchar();
