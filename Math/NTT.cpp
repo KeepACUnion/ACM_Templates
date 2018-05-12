@@ -14,32 +14,25 @@ using namespace std;
 typedef long long ll;
 const ll g = 3, modn = (479<<21)+1;
 const int maxn = 1<<17;
-
 ll a[maxn], b[maxn];
 char s[maxn];
-
-ll quickpow(ll base, ll n, const ll &P)
-{
+ll quickpow(ll base, ll n, const ll &P){
     ll ans = 1;
-    while(n) {
+    while(n){
         if(n&1) ans = ans*base%P;
         base = base*base%P;
         n >>= 1;
     }
     return ans;
 }
-
-inline ll multi(ll x,ll y,ll P)
-{
+inline ll multi(ll x,ll y,ll P){
     ll tmp=(x*y-(ll)((long double)x/P*y+1.0e-8)*P);
     return tmp<0 ? tmp+P : tmp;
 }
 inline int nor(int x) { return x<0?x+modn:x<modn?x:x-modn; }
-
 /// len: must be 2^k and not smaller than length of x
 /// note that len of NTT must be equal to len of INTT
-void ntt(ll x[], const int &len, const int &on)
-{
+void ntt(ll x[], const int &len, const int &on){
     for(int i=1, j=len/2; i<len-1; i++) {
         if(i<j) swap(x[i], x[j]);
         int k = len/2;
@@ -70,8 +63,6 @@ void ntt(ll x[], const int &len, const int &on)
             x[i] = x[i]*inv%modn;
     }
 }
-
-
 /**
 prime number:
   g   r   k             modn
