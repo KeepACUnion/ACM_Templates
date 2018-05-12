@@ -11,7 +11,6 @@ struct Complex{
         return Complex(a*rbs.a-b*rbs.b, a*rbs.b+b*rbs.a);
     }
 };
-
 void change(Complex y[], int len){
     for(int i = 1, j = len/2; i < len-1; i++){
         if(i < j) swap(y[i], y[j]);
@@ -23,7 +22,6 @@ void change(Complex y[], int len){
         }
     }
 }
-
 void fft(Complex y[], int len, int o){
     change(y, len);
     for(int h = 2; h <= len; h <<= 1){
