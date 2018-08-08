@@ -1,7 +1,9 @@
 //d[i]为i的最小质因子的次幂
+const int MAX = 1e6+10;
+int pnum,p[maxn],mob[maxn],noprime[maxn],facnum[maxn],d[maxn],phi[maxn];
 void get_all()
 {
-    int pnum = 0;
+    pnum = 0;
     phi[1] = 1;
     mob[1] = 1;
     facnum[1] = 1;
