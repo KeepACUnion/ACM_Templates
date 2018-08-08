@@ -38,3 +38,21 @@ LL comb(int y, int x){
     if(x < y) swap(x,y);
     return fac[x]*iv[x-y]%mod*iv[y]%mod;
 }
+
+
+//O(n)预处理,mod必须是质数
+const int maxc = 1e6+10;
+int FAC[maxc], IVF[maxc], IV[maxc];
+void init(){
+    initp();
+    IV[1] = FAC[0] = FAC[1] = IVF[1] = 1;
+    for(int i = 2; i < maxc; i++){
+        FAC[i] = 1LL*FAC[i-1]*i%mod;
+        IV[i] = 1LL*(mod-mod/i)*IV[mod%i]%mod;
+        IVF[i] = 1LL*IVF[i-1]*IV[i]%mod;
+    }
+}
+LL comb(int x, int y){
+    if(x < y) swap(x,y);
+    return 1LL*FAC[x]*IVF[x-y]%mod*IVF[y]%mod;
+}
