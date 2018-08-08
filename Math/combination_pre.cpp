@@ -36,7 +36,5 @@ void init(){
 }
 LL comb(int y, int x){
     if(x < y) swap(x,y);
-    LL res = (fac[x]*iv[x-y])%mod;
-    res = (res*iv[y])%mod;
-    return res;
+    return fac[x]*iv[x-y]%mod*iv[y]%mod;
 }
