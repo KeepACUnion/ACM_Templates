@@ -10,10 +10,9 @@ void init(){
     }
 }
 
-///预处理阶乘+逆元 
-
-const int maxn = 2e6+10;
-LL fac[maxn], iv[maxn];
+///O(nlogn)预处理阶乘+逆元 
+const int maxc = 2e6+10;
+LL fac[maxc], iv[maxc];
 void extgcd(LL aa,LL bb,LL& dd,LL& xx,LL& yy){
     if(!bb){
         dd = aa;
@@ -31,9 +30,9 @@ LL inv(LL aa,LL mm){
 }
 void init(){
     fac[0] = 1;
-    for(int i = 1; i < maxn; i++) fac[i] = (i*fac[i-1])%mod;
-    iv[maxn-1] = inv(fac[maxn-1], mod);
-    for(int i = maxn-2; i >= 0; i--) iv[i] = iv[i+1]*(i+1)%mod;
+    for(int i = 1; i < maxc; i++) fac[i] = (i*fac[i-1])%mod;
+    iv[maxc-1] = inv(fac[maxc-1], mod);
+    for(int i = maxc-2; i >= 0; i--) iv[i] = iv[i+1]*(i+1)%mod;
 }
 LL comb(int y, int x){
     if(x < y) swap(x,y);
