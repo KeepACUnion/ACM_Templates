@@ -1,4 +1,5 @@
 
+///fwt opt = 1, ufwt opt = -1;
 void FWT_or(int *a,int opt)
 {
     for(int i=1;i<N;i<<=1)
