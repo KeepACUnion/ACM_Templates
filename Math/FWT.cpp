@@ -1,6 +1,7 @@
-
-///fwt opt = 1, ufwt opt = -1;
-void FWT_or(int *a,int opt)
+const int MOD = 1e9+7;
+const int inv2 = (MOD+1) >> 1;
+///fwt opt = 1, ufwt opt = -1
+void FWT_or(int *a, int N, int opt=1)
 {
     for(int i=1;i<N;i<<=1)
         for(int p=i<<1,j=0;j<N;j+=p)
@@ -8,7 +9,7 @@ void FWT_or(int *a,int opt)
                 if(opt==1)a[i+j+k]=(a[j+k]+a[i+j+k])%MOD;
                 else a[i+j+k]=(a[i+j+k]+MOD-a[j+k])%MOD;
 }
-void FWT_and(int *a,int opt)
+void FWT_and(int *a, int N, int opt=1)
 {
     for(int i=1;i<N;i<<=1)
         for(int p=i<<1,j=0;j<N;j+=p)
@@ -16,7 +17,7 @@ void FWT_and(int *a,int opt)
                 if(opt==1)a[j+k]=(a[j+k]+a[i+j+k])%MOD;
                 else a[j+k]=(a[j+k]+MOD-a[i+j+k])%MOD;
 }
-void FWT_xor(int *a,int opt)
+void FWT_xor(int *a, int N, int opt=1)
 {
     for(int i=1;i<N;i<<=1)
         for(int p=i<<1,j=0;j<N;j+=p)
