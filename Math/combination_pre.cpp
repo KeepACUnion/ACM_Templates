@@ -44,7 +44,7 @@ LL comb(int y, int x){
 const int maxc = 1e6+10;
 int FAC[maxc], IVF[maxc], IV[maxc];
 void init(){
-    IV[1] = FAC[0] = FAC[1] = IVF[1] = 1;
+    IV[1] = FAC[0] = FAC[1] = IVF[0] = IVF[1] = 1;
     for(int i = 2; i < maxc; i++){
         FAC[i] = 1LL*FAC[i-1]*i%mod;
         IV[i] = 1LL*(mod-mod/i)*IV[mod%i]%mod;
