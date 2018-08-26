@@ -26,7 +26,7 @@ inline ll multi(ll x,ll y,ll P){
 inline int nor(int x) { return x<0?x+modn:x<modn?x:x-modn; }
 /// len: must be 2^k and not smaller than length of x
 /// note that len of NTT must be equal to len of INTT
-void ntt(ll x[], const int &len, const int &on){
+void ntt(ll x[], int len, int on = 1){
     for(int i=1, j=len/2; i<len-1; i++) {
         if(i<j) swap(x[i], x[j]);
         int k = len/2;
