@@ -10,8 +10,6 @@
 typedef long long ll;
 const ll g = 3, modn = (479<<21)+1;
 const int maxn = 1<<17;
-ll a[maxn], b[maxn];
-char s[maxn];
 ll quickpow(ll base, ll n, const ll &P){
     ll ans = 1;
     while(n){
