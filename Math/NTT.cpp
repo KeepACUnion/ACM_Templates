@@ -7,10 +7,6 @@
  * * n<= 2^21
  * prototype problem: HDU1402
  ******/
-#include <cstdio>
-#include <cstring>
-#include <algorithm>
-using namespace std;
 typedef long long ll;
 const ll g = 3, modn = (479<<21)+1;
 const int maxn = 1<<17;
