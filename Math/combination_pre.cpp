@@ -10,10 +10,10 @@ void init(){
     }
 }
 
-///预处理阶乘+逆元 
-const int maxn = 1e6+10;
-ll fac[maxn], iv[maxn];
-void extgcd(ll aa,ll bb,ll& dd,ll& xx,ll& yy){
+///O(nlogn)预处理阶乘+逆元 
+const int maxc = 2e6+10;
+LL fac[maxc], iv[maxc];
+void extgcd(LL aa,LL bb,LL& dd,LL& xx,LL& yy){
     if(!bb){
         dd = aa;
         xx = 1;
@@ -23,22 +23,35 @@ void extgcd(ll aa,ll bb,ll& dd,ll& xx,ll& yy){
         yy -= xx*(aa/bb);
     }
 }
-ll inv(ll aa,ll mm){
-    ll dd, xx, yy;
+LL inv(LL aa,LL mm){
+    LL dd, xx, yy;
     extgcd(aa, mm, dd, xx, yy);
     return dd==1?(xx+mm)%mm:-1;
 }
 void init(){
     fac[0] = 1;
-    iv[0] = inv(fac[0], mod);
-    for(int i = 1; i < maxn; i++){
-        fac[i] = (i*fac[i-1])%mod;
-        iv[i] = inv(fac[i], mod);
+    for(int i = 1; i < maxc; i++) fac[i] = (i*fac[i-1])%mod;
+    iv[maxc-1] = inv(fac[maxc-1], mod);
+    for(int i = maxc-2; i >= 0; i--) iv[i] = iv[i+1]*(i+1)%mod;
+}
+LL comb(int y, int x){
+    if(x < y) swap(x,y);
+    return fac[x]*iv[x-y]%mod*iv[y]%mod;
+}
+
+
+//O(n)预处理,mod必须是质数
+const int maxc = 1e6+10;
+int FAC[maxc], IVF[maxc], IV[maxc];
+void init(){
+    IV[1] = FAC[0] = FAC[1] = IVF[0] = IVF[1] = 1;
+    for(int i = 2; i < maxc; i++){
+        FAC[i] = 1LL*FAC[i-1]*i%mod;
+        IV[i] = 1LL*(mod-mod/i)*IV[mod%i]%mod;
+        IVF[i] = 1LL*IVF[i-1]*IV[i]%mod;
     }
 }
-ll comb(int x, int y){
+LL comb(int x, int y){
     if(x < y) swap(x,y);
-    ll res = (fac[x]*iv[x-y])%mod;
-    res = (res*iv[y])%mod;
-    return res;
+    return 1LL*FAC[x]*IVF[x-y]%mod*IVF[y]%mod;
 }
