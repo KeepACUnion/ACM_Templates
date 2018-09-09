@@ -1,31 +1,46 @@
-#include <stack>
+#include <cstdio>
 #include <vector>
+#include <cstring>
 using namespace std;
 #define pb push_back
-int n, m;
 const int maxn = 1e5+10;
-vector<int> G[maxn];
-stack<int> sk;
-vector<int> ans;
-
-void euler(int st)//调用后会修改原图
+const int maxm = 1e6+10;
+struct edge
 {
-    sk.push(st);
-    while(!sk.empty()){
-        int u = sk.top();
-        bool flg = 0;
-        for(int i = 0; i < (int)G[u].size(); i++){
-            int v = G[u][i];
-            if(v != -1){
-                flg = 1;
-                G[u][i] = -1;
-                sk.push(v);
-                break;
-            }
-        }
-        if(!flg){
-            ans.pb(u);
-            sk.pop();
-        }
+    int to, nxt;
+    edge(){}
+    edge(int to, int nxt):to(to), nxt(nxt){}
+}es[maxm];
+int head[maxn], deg[maxn];
+bool used[maxm], vis[maxn];
+vector<int> seq;
+int n, m, cnt;
+
+void init()
+{
+    memset(deg, 0, sizeof(deg));
+    memset(vis, 0, sizeof(vis));
+    memset(used, 0, sizeof(used));
+
+}
+
+void add_edge(int u, int v)
+{
+    es[cnt] = edge(v, head[u]);
+    head[u] = cnt++;
+    es[cnt] = edge(u, head[v]);
+    head[v] = cnt++;
+}
+
+void dfs(int u)
+{
+    vis[u] = 1;
+    for(int i = head[u]; ~i; i = head[u]){
+        head[u] = es[i].nxt;
+        if(used[i>>1])continue;
+        used[i>>1] = 1;
+        int v = es[i].to;
+        dfs(v);
+        seq.pb(i);
     }
 }
