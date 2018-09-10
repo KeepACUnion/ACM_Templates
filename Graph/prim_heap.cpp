@@ -6,7 +6,7 @@ typedef pair<int, int> pii;
 #define se second
 #define mk make_pair
 const int maxn = 1e6+10;
-vector<pii> G[maxn];
+vector<pii> G[maxn]; //需要去重边
 int cost[maxn];
 bool vis[maxn];
 int prim()
