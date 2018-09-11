@@ -1,17 +1,17 @@
 #include <vector>
+#include <cstring>
 using namespace std;
-const int maxn = 1e3+10;
+const int maxn = 5e2+10;
 vector<int> G[maxn];
 int mat[maxn];
 bool vis[maxn];
 int n;
-bool dfs(int x){  
-    for (int i = 0; i < (int)G[x].size(); i++){
-        int v = G[x][i];
+bool dfs(int u){  
+    for(auto v : G[u]){
         if(!vis[v]){
             vis[v] = 1;  
             if (mat[v] == 0 || dfs(mat[v])){   
-                mat[v] = x;  
+                mat[v] = u;  
                 return true;  
             }  
         }  
@@ -20,6 +20,7 @@ bool dfs(int x){
 }
 int solve()
 {
+    memset(mat, 0, sizeof(mat));
     int ans = 0;
     for(int i = 1; i <= n; i++){
         memset(vis, 0, sizeof(vis));
