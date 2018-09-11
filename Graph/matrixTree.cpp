@@ -2,9 +2,9 @@
 using namespace std;
 typedef long long ll;
 #define ABS(x) ((x)>=0?(x):(-(x)))
-const int maxn = 110;
+const int maxn = 5e2+10;
 vector<int> G[maxn];
-int n;
+int n; //0-index
 ll det()
 {
     ll ret = 1;
