@@ -4,6 +4,8 @@ const int maxn = 1e5+10;
 struct edge
 {
     int u, v, w;
+    edge(){}
+    edge(int u, int v, int w):u(u), v(v), w(w){}
     bool operator < (const edge &rhs)const
     {
         return w < rhs.w;
