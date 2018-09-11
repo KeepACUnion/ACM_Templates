@@ -15,15 +15,12 @@ int head[maxn], deg[maxn];
 bool used[maxm], vis[maxn];
 vector<int> seq;
 int n, m, cnt;
-
 void init()
 {
     memset(deg, 0, sizeof(deg));
     memset(vis, 0, sizeof(vis));
     memset(used, 0, sizeof(used));
-
 }
-
 void add_edge(int u, int v)
 {
     es[cnt] = edge(v, head[u]);
@@ -31,12 +28,10 @@ void add_edge(int u, int v)
     es[cnt] = edge(u, head[v]);
     head[v] = cnt++;
 }
-
 void dfs(int u)
 {
     vis[u] = 1;
     for(int i = head[u]; ~i; i = head[u]){
-        head[u] = es[i].nxt;
         if(used[i>>1])continue;
         used[i>>1] = 1;
         int v = es[i].to;
