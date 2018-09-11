@@ -1,92 +1,67 @@
 #include <cstdio>
+#include <cstring>
+#include <vector>
 using namespace std;
 typedef long long ll;
-const int MaxN = 100000 + 10, MaxE = (5 * 100000) * 2 + MaxN;
-int head[MaxN], pre[MaxN], dom[MaxN], to[MaxE], nxt[MaxE], top;
-int bcj[MaxN], semi[MaxN], idom[MaxN], best[MaxN], dfn[MaxN], id[MaxN], fa[MaxN], dfs_clock;
-int sons[MaxN];
-int n, m;
-ll ans;
-void addedge(int *h,int fr,int tt)
-{
-    top ++;
-    nxt[top] = h[fr];
-    to[top] = tt;
-    h[fr] = top;
-}
+#define pb push_back
+const int maxn = 1e6+10;
+vector<int> G[maxn], G2[maxn], dom[maxn];
+int dfn[maxn], id[maxn], fa[maxn];
+int semi[maxn], best[maxn], par[maxn], idom[maxn];
+ll ans[maxn];
+int n, m, idx;
 void init()
 {
-    scanf("%d%d", &n, &m);
-    int a, b;
-    for(int i = 1; i <= m; ++i)
-    {
-        scanf("%d%d", &a, &b);
-        addedge(head, a, b);
-        addedge(pre, b, a);
+    for(int i = 0; i <= n; i++)G[i].clear(), G2[i].clear(), dom[i].clear();
+    memset(dfn, 0, sizeof(dfn));
+    memset(ans, 0, sizeof(ans));
+    idx = 0;
+}
+void dfs(int u)
+{
+    dfn[u] = ++idx;
+    id[idx] = u;
+    for(auto v : G[u]){
+        if(!dfn[v]){
+            dfs(v);
+            fa[v] = u;
+        }
     }
 }
-int push(int v)
+int find(int x)
 {
-    if(v == bcj[v]) return v;
-    int y = push(bcj[v]);
-    if(dfn[semi[best[bcj[v]]]] < dfn[semi[best[v]]]) best[v] = best[bcj[v]];
-    return bcj[v] = y;
-}//带权并查集路径压缩
-void dfs(int rt)
-{
-    dfn[rt] = ++dfs_clock;
-    id[dfs_clock] = rt;
-    for(int i = head[rt]; i; i = nxt[i])
-        if(!dfn[to[i]])
-        {
-            dfs(to[i]);
-            fa[to[i]] = rt;
-        }
-
-}//求出dfs序
+    if(par[x] == x)return x;
+    int y = find(par[x]);
+    if(dfn[semi[best[par[x]]]] < dfn[semi[best[x]]])best[x] = best[par[x]];
+    return par[x] = y;
+}
 void tarjan()
 {
-    for(int i = dfs_clock, u; i >= 2; --i)
-    {//按dfs序从大到小计算
-        u = id[i];
-        for(int j = pre[u]; j; j = nxt[j])//semi
-        {
-            if(!dfn[to[j]]) continue;
-            push(to[j]);
-            if(dfn[semi[best[to[j]]]] < dfn[semi[u]]) semi[u] = semi[best[to[j]]];
+    for(int i = idx; i >= 2; i--){
+        int u = id[i];
+        for(auto v : G2[u]){
+            if(!dfn[v])continue;
+            find(v);
+            if(dfn[semi[best[v]]] < dfn[semi[u]])semi[u] = semi[best[v]];
         }
-        addedge(dom, semi[u], u);
-        bcj[u] = fa[u];u = id[i - 1];
-        for(int j = dom[u]; j; j = nxt[j])//idom
-        {
-            push(to[j]);
-            if(semi[best[to[j]]] == u) idom[to[j]] = u;
-            else idom[to[j]] = best[to[j]];
+        dom[semi[u]].pb(u);
+        int x = par[u] = fa[u];
+        for(auto v : dom[x]){
+            find(v);
+            if(dfn[semi[best[v]]] < dfn[fa[u]])idom[v] = best[v];
+            else idom[v] = fa[u];
         }
+        dom[x].clear();
     }
-    for(int i = 2, u; i <= dfs_clock; ++i)
-    {
-        u = id[i];
-        if(idom[u] != semi[u]) idom[u] = idom[idom[u]];
+    for(int i = 2; i <= idx; i++){
+        int u = id[i];
+        if(idom[u] != semi[u])idom[u] = idom[idom[u]];
+        dom[idom[u]].pb(u);
     }
 }
-void calc_son()
+void solve(int s)
 {
-    for(int i = dfs_clock, u; i >= 2; --i)
-    {
-        u = id[i];
-        ++ sons[u];
-        if(idom[u] != 1) sons[idom[u]] += sons[u];
-        else ans -= ((ll)sons[u] * (ll)(sons[u] - 1)) / 2ll;
-    }
-}
-void solve()
-{
-    for(int i = 1; i <= n; ++i) bcj[i] = semi[i] = best[i] = i;
-    dfs_clock = 0;
-    dfs(1);
+    for(int i = 1; i <= n; i++)par[i] = best[i] = semi[i] = i; 
+    dfs(s);
     tarjan();
-    ans = ((ll)dfs_clock * (ll)(dfs_clock - 1)) / 2ll;
-    calc_son();
-    printf("%lld\n", ans);
 }
