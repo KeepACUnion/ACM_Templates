@@ -4,15 +4,14 @@
 using namespace std;
 const int maxn = 1e5+10;
 vector<int> G[maxn];
-stack<int> S;
-int low[maxn], dfn[maxn], scc[maxn];
+stack<int> sk;
+int low[maxn], dfn[maxn], scc[maxn], num[maxn];
 int n, cnt, idx;
 void dfs(int u, int f)
 {
     low[u] = dfn[u] = ++idx;
-    S.push(u);
-    for(int i = 0; i < (int)G[u].size(); i++){
-        int v = G[u][i];
+    sk.push(u);
+    for(auto v : G[u]){
         if(v == f)continue;
         if(!dfn[v]){
             dfs(v, u);
@@ -25,8 +24,8 @@ void dfs(int u, int f)
     if(low[u] == dfn[u]){
         cnt++;
         while(1){
-            int x = S.top(); S.pop();
-            scc[x] = cnt;
+            int x = sk.top(); sk.pop();
+            scc[x] = cnt; num[cnt]++;
             if(x == u)break;
         }
     }
