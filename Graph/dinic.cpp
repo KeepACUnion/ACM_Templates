@@ -1,31 +1,31 @@
 #include <cstdio>
 #include <cstring>
 #include <queue>
+#include <vector>
 using namespace std;
+#define pb push_back
+#define SZ(x) ((int)x.size())
 const int INF = 0x3f3f3f3f;
 const int maxn = 1e5+10;
 struct edge
 {
-    int to, cap, nxt;
+    int to, cap, rev;
     edge(){}
-    edge(int to, int cap, int nxt):to(to), cap(cap), nxt(nxt){}
-}es[maxn*2];
-int head[maxn];
-int lev[maxn], iter[maxn];
-int n, m, cnt;
+    edge(int to, int cap, int rev):to(to), cap(cap), rev(rev){}
+};
+vector<edge> G[maxn];
+int lev[maxn];
+int n, m;
 
 void init()
 {
-    cnt = 0;
-    memset(head, -1, sizeof(head));
+    for(int i = 0; i <= n; i++)G[i].clear();
 }
 
 void add_edge(int u, int v, int w)
 {
-    es[cnt] = edge(v, w, head[u]);
-    head[u] = cnt++;
-    es[cnt] = edge(u, w, head[v]);
-    head[v] = cnt++;
+    G[u].pb(edge(v, w, SZ(G[v])));
+    G[v].pb(edge(u, w, SZ(G[u])-1));
 }
 
 bool bfs(int s, int t)
@@ -35,11 +35,10 @@ bool bfs(int s, int t)
     queue<int> q;
     q.push(s);
     while(!q.empty()){
-        int v = q.front(); q.pop();
-        for(int i = head[v]; ~i; i = es[i].nxt){
-            edge &e = es[i];
+        int u = q.front(); q.pop();
+        for(auto &e : G[u]){
             if(e.cap > 0 && lev[e.to] < 0){
-                lev[e.to] = lev[v]+1;
+                lev[e.to] = lev[u]+1;
                 if(e.to == t)return 1;
                 q.push(e.to);
             }
@@ -52,13 +51,12 @@ int dfs(int v, int t, int f)
 {
     if(v == t)return f;
     int ret = 0;
-    for(int &i = iter[v]; ~i; i = es[i].nxt){
-        edge &e = es[i];
+    for(auto &e : G[v]){
         if(e.cap > 0 && lev[e.to] == lev[v]+1){
             int d = dfs(e.to, t, min(e.cap, f-ret));
             if(d > 0){
                 e.cap -= d;
-                es[i^1].cap += d;
+                G[e.to][e.rev].cap += d;
                 ret += d;
                 if(ret == f)break;
             }
@@ -72,9 +70,6 @@ int dfs(int v, int t, int f)
 int max_flow(int s, int t)
 {
     int flow = 0;
-    while(bfs(s, t)){
-        memcpy(iter, head, sizeof(head));
-        flow += dfs(s, t, INF);
-    }
+    while(bfs(s, t))flow += dfs(s, t, INF);
     return flow;
 }
