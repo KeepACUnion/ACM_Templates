@@ -8,7 +8,6 @@ int dx[maxn], dy[maxn], mat[maxn], pre[maxn], sl[maxn];
 int G[maxn][maxn];
 bool vis[maxn];
 int n;
-
 void bfs(int x)
 {
     memset(vis, 0, sizeof(vis));
@@ -37,7 +36,6 @@ void bfs(int x)
     }while(mat[ny]);
     while(ny)mat[ny] = mat[pre[ny]], ny = pre[ny];
 }
-
 int KM() {
     memset(mat, 0, sizeof(mat));
     memset(dy, 0, sizeof(dy));

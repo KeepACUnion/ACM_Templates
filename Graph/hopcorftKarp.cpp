@@ -7,7 +7,6 @@ vector<int> G[maxn];
 int mtx[maxn], mty[maxn], dx[maxn], dy[maxn];
 bool vis[maxn];
 int dis, uN, vN;
-
 bool bfs()
 {
     dis = INF;
@@ -33,7 +32,6 @@ bool bfs()
     }
     return dis < INF;
 }
-
 bool dfs(int u)
 {
     for(auto v : G[u]){
@@ -49,7 +47,6 @@ bool dfs(int u)
     }
     return 0;
 }
-
 int max_match()
 {
     int ret = 0;

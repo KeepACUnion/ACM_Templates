@@ -16,18 +16,15 @@ struct edge
 vector<edge> G[maxn];
 int lev[maxn];
 int n, m;
-
 void init()
 {
     for(int i = 0; i <= n; i++)G[i].clear();
 }
-
 void add_edge(int u, int v, int w)
 {
     G[u].pb(edge(v, w, SZ(G[v])));
     G[v].pb(edge(u, w, SZ(G[u])-1));
 }
-
 bool bfs(int s, int t)
 {
     memset(lev, -1, sizeof(lev));
@@ -46,7 +43,6 @@ bool bfs(int s, int t)
     }
     return 0;
 }
-
 int dfs(int v, int t, int f)
 {
     if(v == t)return f;
@@ -66,7 +62,6 @@ int dfs(int v, int t, int f)
     if(!ret)lev[v] = 0;
     return ret;
 }
-
 int max_flow(int s, int t)
 {
     int flow = 0;

@@ -8,7 +8,6 @@ vector<int> G[maxn];
 int fa[maxn], vis[maxn], mat[maxn], pre[maxn], typ[maxn];
 int n, m, tim;
 queue<int> q;
-
 void init()
 {
     tim = 0;
@@ -16,7 +15,6 @@ void init()
     memset(mat, 0, sizeof(mat));
     memset(pre, 0, sizeof(pre));
 }
-
 int lca(int x, int y) 
 {
     tim++;
@@ -30,7 +28,6 @@ int lca(int x, int y)
     }
     return x;
 }
-
 void blossom(int x, int y, int f)
 {
     while(fa[x] != f){
@@ -76,7 +73,6 @@ bool augument(int s)
     }
     return 0;
 }
-
 int solve()
 {
     init();

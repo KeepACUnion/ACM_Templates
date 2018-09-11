@@ -18,7 +18,6 @@ struct edge
 vector<edge> G[maxv];
 bool vis[maxv];
 int dist[maxv];
-
 void add_edge(int from, int to, int cap, int cost)
 {
     G[from].pb(edge(to, cap, (int)G[to].size(), cost));
@@ -43,7 +42,6 @@ bool dijkstra(int s, int t)
     }
     return dist[s] < INF;
 }
-
 int dfs(int v, int t, int f)
 {
     vis[v] = 1;
@@ -63,7 +61,6 @@ int dfs(int v, int t, int f)
     }
     return ret;
 }
-
 int costflow(int s, int t)
 {
     int flow = 0;
