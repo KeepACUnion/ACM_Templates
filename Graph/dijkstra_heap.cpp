@@ -17,8 +17,7 @@ void dijkstra(int s)
     while(!pq.empty()){
         pii p = pq.top(); pq.pop();
         if(cost[p.se] < p.fi)continue;
-        for(int i = 0; i < (int)G[p.se].size(); i++){
-            pii v = G[p.se][i];
+        for(auto v : G[p.se]){
             if(cost[v.fi] > cost[p.se]+v.se){
                 cost[v.fi] = cost[p.se]+v.se;
                 pq.push(mk(cost[v.fi], v.fi));
