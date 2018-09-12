@@ -1,31 +1,33 @@
+#include <cstdio>
 #include <stack>
 #include <vector>
 using namespace std;
 typedef pair<int, int> pii;
 #define pb push_back
 #define mk make_pair
+#define SZ(x) ((int)x.size())
 #define fi first 
 #define se second
 const int maxn = 1e3+10;
 const int maxm = 2e4+10;
 struct edge
 {
-    int to, cap, nxt;
-}es[maxm];
-int head[maxn], iter[maxn], lev[maxn];
-int deg[maxn];
-vector<int> G[maxn];
+    int to, cap, rev;
+    edge(){}
+    edge(int to, int cap, int rev):to(to), cap(cap), rev(rev){}
+};
+vector<edge> G[maxn];
+vector<int> G2[maxn];
+int lev[maxn], deg[maxn];
 stack<int> S;
 pii p[maxm];
-int n, m, cnt;
+int n, m;
 void add_edge(int u, int v, int cap)
 {
-    es[cnt].to = v, es[cnt].cap = cap, es[cnt].nxt = head[u];
-    head[u] = cnt++;
-    es[cnt].to = u, es[cnt].cap = 0, es[cnt].nxt = head[v];
-    head[v] = cnt++;
+    G[u].pb(edge(v, cap, SZ(G[v])));
+    G[v].pb(edge(u, 0, SZ(G[u])-1));
 }
-bool solve()
+bool mixedEuler()
 {
     int num = 0;
     for(int i = 0; i < m; i++){
@@ -33,7 +35,7 @@ bool solve()
         scanf("%d%d%d", &u, &v, &type);
         deg[u]++, deg[v]--;
         if(type == 1)p[num++] = mk(u, v);//undirected
-        else G[u].pb(v);//directed
+        else G2[u].pb(v);//directed
     }
     bool flg = 1;
     int src = n+1, dst = src+1;
@@ -48,8 +50,8 @@ bool solve()
     if(!flg)return 0;//没有合法欧拉路
     for(int i = 0; i < num; i++)add_edge(p[i].fi, p[i].se, 1);
     max_flow(src, dst);
-    for(int i = head[src]; ~i; i = es[i].nxt){
-        if(es[i].cap){
+    for(auto e : G[src]){
+        if(e.cap){
             flg = 0;
             break;
         }
@@ -57,9 +59,8 @@ bool solve()
     if(!flg)return 0;
     else{
         for(int i = 1; i <= n; i++){
-            for(int j = head[i]; ~j; j = es[j].nxt){
-                int u = i, v = es[j].to;
-                if(v <= n && es[j].cap)G[u].pb(v);
+            for(auto e : G[i]){
+                if(e.to <= n && e.cap)G2[i].pb(e.to);
             }
         }
         euler();
