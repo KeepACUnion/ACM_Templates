@@ -40,7 +40,6 @@ bool dfs(int u)
             if(dy[v] == dis && mty[v])continue;
             else if(!mty[v] || dfs(mty[v])){
                 mty[v] = u, mtx[u] = v;
-                //printf("match(%d,%d)\n", u, v);
                 return 1;
             }
         }
