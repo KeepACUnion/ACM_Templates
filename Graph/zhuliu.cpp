@@ -9,6 +9,7 @@ struct edge
 }es[maxe];
 int vis[maxn], id[maxn], pre[maxn], in[maxn];
 int n, m;
+//如果是无根的最小树形图，那么建一个超级根向所有点连边，权值为sum(w)+1，如果ret-sum>=sum，无解，否则有解
 int zhuliu(int root)
 {
     int ret = 0;
