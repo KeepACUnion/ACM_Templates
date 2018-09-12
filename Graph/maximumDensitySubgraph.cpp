@@ -1,9 +1,12 @@
 #include <cstring>
 #include <queue>
+#include <vector>
+#include <cstdio>
 using namespace std;
 typedef pair<int, int> pii;
 #define mk make_pair
 #define pb push_back
+#define SZ(x) ((int)x.size())
 #define fi first
 #define se second
 const double eps = 1e-10;
@@ -12,82 +15,35 @@ const int maxn = 1e4+10;
 const int maxm = 1e4+10;
 struct edge
 {
-    int to, nxt;
+    int to, rev;
     long double cap;
-}es[maxm];
-int head[maxn], iter[maxn], lev[maxn];
-pii p[maxm];
+    edge(){}
+    edge(int to, int rev, long double cap):to(to), rev(rev), cap(cap){}
+};
+vector<edge> G[maxn];
+int lev[maxn];
+pii in[maxm];
 bool vis[maxn];
-int N, M, cnt;
+int n, m, cnt;
 void init()
 {
-    cnt = 0;
-    memset(head, -1, sizeof(head));
+    for(int i = 0; i < maxn; i++)G[i].clear();
 }
 void add_edge(int u, int v, long double cap)
 {
-    es[cnt].to = v, es[cnt].cap = cap, es[cnt].nxt = head[u];
-    head[u] = cnt++;
-    es[cnt].to = u, es[cnt].cap = 0, es[cnt].nxt = head[v];
-    head[v] = cnt++;
+    G[u].pb(edge(v, SZ(G[v]), cap));
+    G[v].pb(edge(u, SZ(G[u])-1, 0));
 }
-bool bfs(int s, int t)
-{
-    memset(lev, -1, sizeof(lev));
-    lev[s] = 1;
-    queue<int> q;
-    q.push(s);
-    while(!q.empty()){
-        int u = q.front(); q.pop();
-        for(int i = head[u]; ~i; i = es[i].nxt){
-            edge &e = es[i];
-            if(e.cap > eps && lev[e.to] < 0){
-                lev[e.to] = lev[u]+1;
-                if(e.to == t)return 1;
-                q.push(e.to);
-            }
-        }
-    }
-    return 0;
-}
-long double dfs(int v, int t, long double f)
-{
-    if(v == t)return f;
-    long double ret = 0;
-    for(int &i = iter[v]; ~i; i = es[i].nxt){
-        edge &e = es[i];
-        if(e.cap > eps && lev[e.to] == lev[v]+1){
-            long double d = dfs(e.to, t, min(e.cap, f-ret));
-            if(d > eps){
-                e.cap -= d;
-                es[i^1].cap += d;
-                ret += d;
-                if(ret+eps >= f)break;
-            }
-        }
-    }
-    if(ret < eps)lev[v] = 0;
-    return ret;
-}
-long double max_flow(int s, int t)
-{
-    long double ret = 0;
-    while(bfs(s, t)){
-        memcpy(iter, head, sizeof(head));
-        ret += dfs(s, t, INF);
-    }
-    return ret;
-}
-bool maximumDensitySubgraph(long double m)
+bool solve(long double mid)
 {
     init();
-    int src = N+M+1, dst = src+1;
+    int src = n+m+1, dst = src+1;
     long double sum = 0;
-    for(int i = 1; i <= N; i++)add_edge(i, dst, m);
-    for(int i = 1; i <= M; i++){
-        add_edge(src, i+N, 1), sum += 1;
-        add_edge(i+N, p[i].fi, INF);
-        add_edge(i+N, p[i].se, INF);
+    for(int i = 1; i <= n; i++)add_edge(i, dst, mid);
+    for(int i = 1; i <= m; i++){
+        add_edge(src, i+n, 1), sum += 1;
+        add_edge(i+n, in[i].fi, INF);
+        add_edge(i+n, in[i].se, INF);
     }
     long double ret = sum-max_flow(src, dst);
     return ret > eps;
@@ -95,34 +51,32 @@ bool maximumDensitySubgraph(long double m)
 void dfs(int u)
 {
     vis[u] = 1;
-    for(int i = head[u]; ~i; i = es[i].nxt){
-        edge &e = es[i];
+    for(auto e : G[u]){
         if(!vis[e.to] && e.cap > eps)dfs(e.to);
     }
 }
-void solve()
+vector<int> maximumDensitySubgraph()
 {
-    scanf("%d%d", &N, &M);
-    for(int i = 1; i <= M; i++){
+    scanf("%d%d", &n, &m);
+    for(int i = 1; i <= m; i++){
         int u, v;
         scanf("%d%d", &u, &v);
-        p[i] = mk(u, v);
+        in[i] = mk(u, v);
     }
-    long double l = 0, r = M, ans = 0;
-    while(l+1.0/(N*N) <= r){
-        long double m = (l+r)/2;
-        if(maximumDensitySubgraph(m)){
-            ans = m;
-            l = m;
+    long double l = 0, r = m, ans = 0;
+    while(l+1.0/(n*n) <= r){
+        long double mid = (l+r)/2;
+        if(solve(mid)){
+            ans = mid;
+            l = mid;
         }
-        else r = m;
+        else r = mid;
     }
-    maximumDensitySubgraph(ans);
-    int src = N+M+1;
+    solve(ans);
+    int src = n+m+1;
     dfs(src);
     vector<int> vec;
-    for(int i = 1; i <= N; i++)if(vis[i])vec.pb(i);
+    for(int i = 1; i <= n; i++)if(vis[i])vec.pb(i);
     if(vec.empty())vec.pb(1);
-    printf("%d\n", (int)vec.size());
-    for(int i = 0; i < (int)vec.size(); i++)printf("%d\n", vec[i]);
+    return vec;
 }
