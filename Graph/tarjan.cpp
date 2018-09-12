@@ -17,9 +17,7 @@ void dfs(int u, int f)
             dfs(v, u);
             low[u] = min(low[u], low[v]);
         }
-        else if(!scc[v]){
-            low[u] = min(low[u], dfn[v]);
-        }
+        else if(!scc[v])low[u] = min(low[u], dfn[v]);
     }
     if(low[u] == dfn[u]){
         cnt++;
