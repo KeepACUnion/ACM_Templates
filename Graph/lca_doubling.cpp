@@ -4,7 +4,7 @@ const int maxn = 1e6+10;
 const int maxd = 21;
 int anc[maxn][maxd];//anc[i][0]->par[i]
 int dep[maxn];
-int n;
+int n;//1-index
 void init_lca()
 {
     for(int i = 1; i < maxd; i++){
