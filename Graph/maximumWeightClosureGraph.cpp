@@ -1,32 +1,33 @@
 #include <cstdio>
+#include <vector>
 using namespace std;
+#define pb push_back
+#define SZ(x) ((int)x.size())
 typedef long long ll;
 const int maxn = 5e3+10;
-const int maxm = 2e5+10;
 const int INF = 0x3f3f3f3f;
 struct edge
 {
-    int to, cap, nxt;
-}es[maxm];
-int head[maxn];
+    int to, cap, rev;
+    edge(){}
+    edge(int to, int cap, int rev):to(to), cap(cap), rev(rev){}
+};
+vector<edge> G[maxn];
 bool vis[maxn];
 int cnt;
 void add_edge(int u, int v, int cap)
 {
-    es[cnt].to = v, es[cnt].cap = cap, es[cnt].nxt = head[u];
-    head[u] = cnt++;
-    es[cnt].to = u, es[cnt].cap = 0, es[cnt].nxt = head[v];
-    head[v] = cnt++;
+    G[u].pb(edge(v, cap, SZ(G[v])));
+    G[v].pb(edge(u, cap, SZ(G[u])-1));
 }
 void dfs(int u)
 {
     vis[u] = 1;
-    for(int i = head[u]; ~i; i = es[i].nxt){
-        edge e = es[i];
+    for(auto e : G[u]){
         if(e.cap && !vis[e.to])dfs(e.to);
     }
 }
-int solve()
+ll maximumWeightClosureGraph()
 {
     int n, m;
     scanf("%d%d", &n, &m);
@@ -44,9 +45,9 @@ int solve()
     }
     ll ans = sum-max_flow(src, dst);
     dfs(src);
-    int num = 0;
+    vector<int> vec;
     for(int i = 1; i <= n; i++){
-        if(vis[i])num++;
+        if(vis[i])vec.pb(i);//所选点集
     }
     return ans;
 }
