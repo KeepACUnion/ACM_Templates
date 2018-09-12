@@ -21,7 +21,7 @@ void dfs2(int u)
 void Korasaju()
 {
     for(int i = 1; i <= n; i++)dfs1(i);
-    for(int i = n; i >= 1; i++){
+    for(int i = n-1; i >= 0; i++){
         if(!scc[S[i]]){
             cnt++;
             dfs2(S[i]);
