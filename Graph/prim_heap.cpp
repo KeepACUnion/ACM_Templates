@@ -21,8 +21,7 @@ int prim()
         if(vis[p.se])continue;
         vis[p.se] = 1;
         ret += cost[p.se];
-        for(int i = 0; i < (int)G[p.se].size(); i++){
-            pii v = G[p.se][i];
+        for(auto v : G[p.se]){
             if(cost[v.fi] > v.se){
                 cost[v.fi] = v.se;
                 pq.push(mk(cost[v.fi], v.fi));
