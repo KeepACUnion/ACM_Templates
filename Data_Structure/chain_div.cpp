@@ -2,7 +2,7 @@
 const int maxn = 1e5+10;
 ///树链剖分模板
 /************************************************/
-int val_p[maxn], val_e[maxn], ///点权与边权
+int val_p[maxn], val_e[maxn*2], ///点权与边权
         to[maxn*2], nxt[maxn*2],head[maxn*2], tot;
 void tree_init(){
     tot = 0;
