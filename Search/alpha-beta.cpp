@@ -1,4 +1,4 @@
-// player = 1 表示轮到己方， player = 0 表示轮到对方
+// player = 1 表示轮到己方， player = 0 表示轮到对方，己方希望结果最大
 // cur_node 表示当前局面(结点)
 maxmin(player, cur_node, alpha, beta)
 {
