@@ -1,9 +1,11 @@
 #include <vector>
+#include <algorithm>
+#include <cstdio>
 using namespace std;
 #define pb push_back
 #define ALL(x) x.begin(), x.end()
 int n, m;
-const int maxn = 1e5 + 10;
+const int maxn = 1e5+10;
 const int ST_SIZE = (1<<18)-1;
 vector<int> dat[ST_SIZE];
 int A[maxn];
@@ -24,11 +26,12 @@ void init(int k, int l, int r)
 int query(int i, int j, int x, int k, int l, int r)
 {
     if(j <= l || r <= i)return 0;
-    else if(i <= l && r <= j)return upper_bound(ALL(dat[k]), x) - dat[k].begin();
+    else if(i <= l && r <= j)return upper_bound(ALL(dat[k]), x)-dat[k].begin();
     else{
-        int lc = query(i, j, x, k*2+1, l, (l+r)/2);
-        int rc = query(i, j, x, k*2+2, (l+r)/2, r);
-        return lc + rc;
+        int m = (l+r)>>1;
+        int lc = query(i, j, x, k*2+1, l, m);
+        int rc = query(i, j, x, k*2+2, m, r);
+        return lc+rc;
     }
 }
 void solve()
@@ -44,15 +47,15 @@ void solve()
         int l, r, k;
         scanf("%d%d%d", &l, &r, &k);
         l--;
-        int ls = 0, rs = n - 1, ans = 0;
+        int ls = 0, rs = n-1, ans = 0;
         while(ls <= rs){
-            int mid = (ls + rs) / 2;
+            int mid = (ls+rs) / 2;
             int c = query(l, r, nums[mid], 0, 0, n);
             if(c >= k){
-                rs = mid - 1;
+                rs = mid-1;
                 ans = mid;
             }
-            else ls = mid + 1;
+            else ls = mid+1;
         }
         printf("%d\n", nums[ans]);
     }
