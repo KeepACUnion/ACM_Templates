@@ -7,7 +7,11 @@ const int sigma = 26;
 char s[maxn];
 struct Node
 {
-    int idx, state, nxt[maxn][sigma], len[maxn], sz[maxn], fail[maxn];
+    int nxt[maxn][sigma];//后继节点，表示存在c+s+c回文
+    int len[maxn];//节点代表的串的长度
+    int sz[maxn];//节点代表的串的出现次数
+    int fail[maxn];//节点代表的串的失配节点
+    int idx, state;
     void init()
     {
         idx = 1, state = 0;
@@ -19,7 +23,7 @@ struct Node
     {
         int p = ++idx;
         memset(nxt[p], 0, sizeof(nxt[p]));
-        len[p] = sz[p]  = fail[p] = 0;
+        len[p] = sz[p] = fail[p] = 0;
         return p;
     }
     void insert(int x, int pos)
