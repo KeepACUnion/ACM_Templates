@@ -1,7 +1,8 @@
 #include <cstdio>
 using namespace std;
 const int maxn = 1e5+10;
-int root[maxn], ls[maxn], rs[maxn], sum[maxn];
+const int logq = 20;
+int root[maxn], ls[maxn*logq], rs[maxn*logq], sum[maxn*logq];
 int n, cnt;
 void build(int &rt, int l, int r)
 {
