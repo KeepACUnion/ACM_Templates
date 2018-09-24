@@ -1,6 +1,8 @@
 #include <cstdio>
 #include <vector>
 using namespace std;
+#define pb push_back
+#define SZ(x) ((int)x.size())
 const int maxn = 1e5+10;
 struct data
 {
@@ -10,8 +12,13 @@ struct data
 };
 vector<data> q[maxn];
 vector<int> G[maxn];
-int par[maxn];
+int par[maxn], ans[maxn];
 bool vis[maxn];
+void add_query(int u, int v)
+{
+    q[u].pb(data(v, SZ(q[v])));
+    q[v].pb(data(u, SZ(q[u])-1));
+}
 int find(int x)
 {
     return par[x] == x ? x : par[x] = find(par[x]);
