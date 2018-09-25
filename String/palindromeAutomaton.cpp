@@ -8,9 +8,9 @@ char s[maxn];
 struct Node
 {
     int nxt[maxn][sigma];//后继节点，表示存在c+s+c回文
-    int len[maxn];//节点代表的串的长度
-    int sz[maxn];//节点代表的串的出现次数
-    int fail[maxn];//节点代表的串的失配节点
+    int len[maxn];//该状态对应的串的长度
+    int sz[maxn];//该状态对应的串的出现次数
+    int fail[maxn];//该状态的失配指针
     int idx, state;
     void init()
     {
