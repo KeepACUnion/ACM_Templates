@@ -11,6 +11,10 @@ int n, tot;
 void init_rmq()
 {
     for(int i = 0; i < tot; i++)st[i][0] = i;
+    for(int i = 0, j = 0; i < maxn*2; i++){
+        while(i >= (1<<(j+1))) j++;
+        LOG[i] = j;
+    }
     for(int j = 1; (1<<j) <= tot; j++){
         for(int i = 0; i+(1<<j)-1 < tot; i++){
             int u = st[i][j-1], v = st[i+(1<<(j-1))][j-1];
@@ -20,7 +24,7 @@ void init_rmq()
 }
 int query(int l, int r)
 {
-    int k = log2(r-l+1);
+    int k = LOG[r-l+1];
     int u = st[l][k], v = st[r-(1<<k)+1][k];
     return dep[u]<dep[v]?u:v;
 }
