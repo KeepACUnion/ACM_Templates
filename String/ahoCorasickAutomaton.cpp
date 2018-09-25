@@ -1,12 +1,13 @@
 #include <cstring>
 #include <queue>
 using namespace std;
+typedef long long ll;
 const int maxn = 1e6+10;
 const int sigma = 26;
 char s[maxn];
 struct Node
 {
-    int nxt[maxn][sigma], fail[maxn], last[maxn], idx;
+    int nxt[maxn][sigma], fail[maxn], last[maxn], num[maxn], idx;
     int newNode()
     {
         int x = ++idx;
@@ -28,7 +29,7 @@ struct Node
             if(nxt[rt][u] == -1)nxt[rt][u] = newNode();
             rt = nxt[rt][u];
         }
-        last[rt]++;
+        last[rt]++; num[rt]++;
     }
     void get_fail()
     {
@@ -45,6 +46,7 @@ struct Node
         }
         while(!q.empty()){
             int u = q.front(); q.pop();
+            num[u] += num[fail[u]];
             for(int i = 0; i < sigma; i++){
                 int &v = nxt[u][i];
                 int w = fail[u];
@@ -58,15 +60,17 @@ struct Node
     }
     int get_ans()
     {
-        int rt = 0, n = strlen(s), ret = 0;
+        int rt = 0, n = strlen(s);
+        ll ret = 0;
         for(int i = 0; i < n; i++){
             int u = s[i]-'a';
             rt = nxt[rt][u];
-            int tmp = rt;
-            while(tmp){
-                if(last[tmp])ret += last[tmp], last[tmp] = 0;
-                tmp = fail[tmp];
-            }
+            //ret += num[rt];//多重匹配计数
+            //int tmp = rt;//单次匹配计数
+            //while(tmp){
+                //if(last[tmp])ret += last[tmp], last[tmp] = 0;
+                //tmp = fail[tmp];
+            //}
         }
         return ret;
     }
