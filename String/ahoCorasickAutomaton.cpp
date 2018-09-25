@@ -58,7 +58,7 @@ struct Node
             }
         }
     }
-    int get_ans()
+    ll get_ans()
     {
         int rt = 0, n = strlen(s);
         ll ret = 0;
