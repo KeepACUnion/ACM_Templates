@@ -9,8 +9,11 @@ int ans[maxn];
 char s[maxn];
 struct Trie
 {
-    int nxt[maxn][sigma], par[maxn], len[maxn], right[maxn];
-    vector<int> son[maxn];
+    int nxt[maxn][sigma];//后继节点
+    int par[maxn];//parent指针
+    int len[maxn];//该状态对应的最长子串的长度
+    int right[maxn];//该状态的right集合大小
+    vector<int> G[maxn];//parent树
     int lst, idx;
     int newNode()
     {
@@ -21,6 +24,7 @@ struct Trie
     }
     void init()
     {
+        for(int i = 0; i <= idx; i++)G[i].clear();
         idx = 0;
         lst = newNode();
     }
@@ -48,14 +52,14 @@ struct Trie
     }
     void dfs(int u)
     {
-        for(auto v : son[u]){
+        for(auto v : G[u]){
             dfs(v);
             right[u] += right[v];
         }
     }
     void solve()
     {
-        for(int i = 2; i <= idx; i++)son[par[i]].pb(i);
+        for(int i = 2; i <= idx; i++)G[par[i]].pb(i);
         dfs(1);
         for(int i = 2; i <= idx; i++)ans[len[i]] = max(ans[len[i]], right[i]);
     }
