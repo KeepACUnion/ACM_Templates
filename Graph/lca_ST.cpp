@@ -5,13 +5,13 @@ using namespace std;
 const int maxn = 1e5+10;
 const int maxd = 20;
 vector<int> G[maxn];
-int beg[maxn], id[maxn*2], dep[maxn*2];
+int beg[maxn], id[maxn*2], dep[maxn*2], LOG[maxn*2];
 int st[maxn][maxd];
 int n, tot;
 void init_rmq()
 {
     for(int i = 0; i < tot; i++)st[i][0] = i;
-    for(int i = 0, j = 0; i < maxn*2; i++){
+    for(int i = 0, j = 0; i < tot; i++){
         while(i >= (1<<(j+1))) j++;
         LOG[i] = j;
     }
