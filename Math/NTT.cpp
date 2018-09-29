@@ -6,38 +6,35 @@
  * * 0 <= ai < 1004535809 (a number slightly bigger than 1e9)
  * * n<= 2^21
  ******/
+typedef long long LL;
 const int mod = 119 << 23 | 1;
 const int G = 3;
-int wn[20];
+LL wn[20];
 void getwn(){ //  千万不要忘记
-    for (int i = 0; i < 20; i++) wn[i] = Pow(G, (mod - 1) / (1 << i), mod);
+    for (int i = 0; i < 20; i++) wn[i] = qpow(G, (mod - 1) / (1 << i));
 }
-void change(int y[], int len){
-    for (int i = 1, j = len / 2; i < len - 1; i++){
+void ntt(LL y[], int len, int on=1){
+    for (int i = 1, j = (len>>1); i < len - 1; i++){
         if (i < j) swap(y[i], y[j]);
         int k = len / 2;
-        while (j >= k) j -= k, k /= 2;
+        while (j >= k) j -= k, k >>= 1;
         if (j < k) j += k;
     }
-}
-void ntt(int y[], int len, int on){
-    change(y, len);
     for (int h = 2, id = 1; h <= len; h <<= 1, id++){
-        for (int j = 0; j < len; j += h){
-            int w = 1;
-            for (int k = j; k < j + h / 2; k++){
-                int u = y[k] % mod;
-                int t = 1LL * w * (y[k + h / 2] % mod) % mod;
-                y[k] = (u + t) % mod, y[k + h / 2] = ((u - t) % mod + mod) % mod;
-                w = 1LL * w * wn[id] % mod;
+        for (int j = 0; j < len; j += h){ 
+            LL w = 1;
+            for (int k = j; k < j + h / 2; k++){//记得对原数组取模
+                LL u = y[k], t = w * y[k + h / 2] % mod;
+                y[k] = (u + t) % mod, y[k + h / 2] = ((u - t) + 2*mod) % mod;
+                w = w * wn[id] % mod;
             }
         }
     }
     if (on == -1){
         //  原本的除法要用逆元
-        int inv = Pow(len, mod - 2, mod);
+        LL inv = qpow(len, mod - 2);
         for (int i = 1; i < len / 2; i++) swap(y[i], y[len - i]);
-        for (int i = 0; i < len; i++) y[i] = 1LL * y[i] * inv % mod;
+        for (int i = 0; i < len; i++) y[i] = y[i] * inv % mod;
     }
 }
 /**
