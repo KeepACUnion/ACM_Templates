@@ -5,55 +5,36 @@
  * default range:
  * * 0 <= ai < 1004535809 (a number slightly bigger than 1e9)
  * * n<= 2^21
- * prototype problem: HDU1402
  ******/
-typedef long long ll;
-const ll g = 3, modn = (479<<21)+1;
-ll quickpow(ll base, ll n, const ll &P){
-    ll ans = 1;
-    while(n){
-        if(n&1) ans = ans*base%P;
-        base = base*base%P;
-        n >>= 1;
-    }
-    return ans;
+typedef long long LL;
+const int mod = 119 << 23 | 1;
+const int G = 3;
+LL wn[20];
+void getwn(){ //  千万不要忘记
+    for (int i = 0; i < 20; i++) wn[i] = qpow(G, (mod - 1) / (1 << i));
 }
-inline ll multi(ll x,ll y,ll P){
-    ll tmp=(x*y-(ll)((long double)x/P*y+1.0e-8)*P);
-    return tmp<0 ? tmp+P : tmp;
-}
-inline int nor(int x) { return x<0?x+modn:x<modn?x:x-modn; }
-/// len: must be 2^k and not smaller than length of x
-/// note that len of NTT must be equal to len of INTT
-void ntt(ll x[], int len, int on = 1){
-    for(int i=1, j=len/2; i<len-1; i++) {
-        if(i<j) swap(x[i], x[j]);
-        int k = len/2;
-        while(j>=k) {
-            j -= k;
-            k >>=1;
-        }
-        if(j<k) j += k;
+void ntt(LL y[], int len, int on=1){
+    for (int i = 1, j = (len>>1); i < len - 1; i++){
+        if (i < j) swap(y[i], y[j]);
+        int k = len / 2;
+        while (j >= k) j -= k, k >>= 1;
+        if (j < k) j += k;
     }
-    for(int k=1; k<len; k<<=1) {
-        // wm[pos] = quickpow(g, modn>>(pos+1), modn);
-        ll wm = quickpow(g, modn/2/k, modn);
-        for(int i=0; i<len; i+=2*k) {
-            ll w = 1;
-            for(int j=0; j<k; j++) {
-                ll u = x[i+j];
-                ll t = w*x[i+j+k]%modn;
-                x[i+j] = nor(u+t);
-                x[i+j+k] = nor(u-t);
-                w = w*wm%modn;
+    for (int h = 2, id = 1; h <= len; h <<= 1, id++){
+        for (int j = 0; j < len; j += h){ 
+            LL w = 1;
+            for (int k = j; k < j + h / 2; k++){//记得对原数组取模
+                LL u = y[k], t = w * y[k + h / 2] % mod;
+                y[k] = (u + t) % mod, y[k + h / 2] = ((u - t) + 2*mod) % mod;
+                w = w * wn[id] % mod;
             }
         }
     }
-    if(on == -1) {
-        reverse(x+1, x+len);
-        long long inv = quickpow(len, modn-2, modn);
-        for(int i=0; i<len; i++)
-            x[i] = x[i]*inv%modn;
+    if (on == -1){
+        //  原本的除法要用逆元
+        LL inv = qpow(len, mod - 2);
+        for (int i = 1; i < len / 2; i++) swap(y[i], y[len - i]);
+        for (int i = 0; i < len; i++) y[i] = y[i] * inv % mod;
     }
 }
 /**
