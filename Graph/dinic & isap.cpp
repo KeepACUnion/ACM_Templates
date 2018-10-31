@@ -18,7 +18,8 @@ bool bfs(){
 int dfs(int t,int pre){
 	if(t==n)return pre;
 	for(int &i=now[t];i!=-1;i=x[i].ne){
-		if(!x[i].fl||d[x[i].ed]!=d[t]+1||!(k=dfs(x[i].ed,min(x[i].fl,pre))))continue;
+		if(!x[i].fl||d[x[i].ed]!=d[t]+1)continue;
+		if(!(k=dfs(x[i].ed,min(x[i].fl,pre))))continue;
 		x[i].fl-=k,x[i^1].fl+=k;
 		return k;
 	}
@@ -58,7 +59,7 @@ int dfs(int t,int pre){
 int main(){
 	...
 	g[0]=n;
-    while(d[1]<n)ans-=dfs(1,inf);
+    	while(d[1]<n)ans+=dfs(1,inf);
 	return 0;
 }
 */
