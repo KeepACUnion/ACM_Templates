@@ -3,7 +3,6 @@
 #define root(x) (access(x),modify(x),rev(x))       //LCA换根
 
 int l[maxn],r[maxn],f[maxn],b[maxn],mx[maxn],v[maxn];
-struct edge {int st,ed,a,b;} x[maxm];
  
 bool find(int x,int y)    //判断是否在同一棵树
 {
