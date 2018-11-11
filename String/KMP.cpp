@@ -22,10 +22,10 @@ bool match()
 {
     int k = -1;
     m = strlen(t);
-    for(int i = 0; i < n; i++){
+    for(int i = 0; i < m; i++){
         while(k >= 0 && t[i] != s[k+1])k = nxt[k];
         if(t[i] == s[k+1])k++;
-        if(k == n-1)return 1;
+        if(k == m-1)return 1;
     }
     return 0;
 }
