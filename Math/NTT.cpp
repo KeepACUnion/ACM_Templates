@@ -9,9 +9,9 @@
 typedef long long LL;
 const int mod = 119 << 23 | 1;
 const int G = 3;
-LL wn[20];
+LL wn[30];
 void getwn(){ //  千万不要忘记
-    for (int i = 0; i < 20; i++) wn[i] = qpow(G, (mod - 1) / (1 << i));
+    for (int i = 0; i <= 20; i++) wn[i] = qpow(G, (mod - 1) / (1 << i));
 }
 void ntt(LL y[], int len, int on=1){
     for (int i = 1, j = (len>>1); i < len - 1; i++){
