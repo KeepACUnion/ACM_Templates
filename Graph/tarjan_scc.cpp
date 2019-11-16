@@ -12,7 +12,6 @@ void dfs(int u, int f)
     low[u] = dfn[u] = ++idx;
     sk.push(u);
     for(auto v : G[u]){
-        if(v == f)continue;
         if(!dfn[v]){
             dfs(v, u);
             low[u] = min(low[u], low[v]);
