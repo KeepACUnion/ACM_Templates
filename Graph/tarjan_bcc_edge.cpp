@@ -19,7 +19,7 @@ void dfs(int u, int f)
         if(!dfn[v]){
             dfs(v, u);
             low[u] = min(low[u], low[v]);
-            if(low[v] >= dfn[u])cut[i>>1] = 1;
+            if(low[v] > dfn[u])cut[i>>1] = 1;
         }
         else if(dfn[v] < dfn[u])low[u] = min(low[u], dfn[v]);
     }
@@ -29,7 +29,7 @@ void dfs2(int u)
 {
     bcc[u] = cnt;
     for(int i = head[u]; ~i; i = es[i].nxt){
-        if(!cut[i>>1])dfs2(es[i].to);
+        if(!cut[i>>1] && !bcc[es[i].to])dfs2(es[i].to);
     }
 }
 
